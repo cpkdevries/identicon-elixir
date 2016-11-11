@@ -8,9 +8,14 @@ defmodule Identicon do
   end
 
   def build_grid(%Identicon.Image{hex: hex} = image) do
-    hex
-    |> Enum.chunk(3)
-    |> Enum.map(&mirror_row/1)
+    grid = 
+      hex
+      |> Enum.chunk(3)
+      |> Enum.map(&mirror_row/1)
+      |> List.flatten
+      |> Enum.with_index # adds index to every element in our list (creates 2 element tuple)
+
+    %Identicon.Image{image | grid: grid}
   end
 
   def mirror_row([first, second | _tail] = row) do
